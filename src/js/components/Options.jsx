@@ -1,70 +1,14 @@
 import React from 'react';
-import Modal from 'react-modal';
 import { hot } from 'react-hot-loader';
 import { connect } from 'react-redux';
-
-import axios from 'axios';
-
-import { db } from '../firebase';
-
 import CustomModal from './CustomModal';
+
+import { isAccountExits, updateAccountType } from '../Api';
 
 import * as Actions from '../state/actions';
 import * as Aliases from '../state/aliases';
 
 import '../../scss/index.scss';
-
-const Api = {
-  getUserPaymentStatus: ({ uid, email }) => {
-    const url = 'https://47d6201c-3351-4a18-b3b8-88472274520d.mock.pstmn.io/amzfire-client/us-central1/api/getUserPaymentStatus';
-    const data = {
-      reqData: {
-        app: 'amzfire-review-to-order',
-        email: email,
-        userId: uid
-      },
-    };
-    const options = {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json'
-      },
-      data: data,
-      url,
-    };
-    return axios(options);
-  },
-  createPaymentOrder: ({ uid, email }) => {
-    const url = 'https://47d6201c-3351-4a18-b3b8-88472274520d.mock.pstmn.io/amzfire-client/us-central1/api/createPaymentOrder';
-    const data = {
-      reqData: {
-        app: 'amzfire-review-to-order',
-        email: email,
-        userId: uid
-      },
-    };
-    const options = {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json'
-      },
-      data: data,
-      url,
-    };
-    return axios(options);
-  },
-  isAccountExits: ({ uid }) => {
-    return db.collection('users').where('uid', '==', uid).get();
-  },
-  updateAccountType: ({ docId, accountType }) => {
-    return db.collection('users')
-      .doc(docId)
-      .update({
-        accountType: accountType,
-      });
-  }
-}
-
 
 class Options extends React.Component {
   constructor(props) {
@@ -87,12 +31,12 @@ class Options extends React.Component {
   makePayment() {
     const { uid, email, displayName, photoURL } = this.props.user;
     this.props.setLoading(true);
-    Api.isAccountExits({ uid })
+    isAccountExits({ uid })
       .then((snapshot) => {
         if (!snapshot.empty) {
         const accountType = 'PRO';
         const docId = snapshot.docs[0].id;
-        Api.updateAccountType({ docId, accountType })
+        updateAccountType({ docId, accountType })
           .then(response => {
             this.props.setLoading(false);
             this.props.setUser({

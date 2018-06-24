@@ -2,8 +2,7 @@ import React from 'react';
 import { hot } from 'react-hot-loader';
 import { connect } from 'react-redux';
 
-import firebase from 'firebase';
-import { db, provider } from '../firebase';
+import { signIn, isAccountExits, createNewUser } from '../Api';
 
 import * as Actions from '../state/actions';
 import * as Aliases from '../state/aliases';
@@ -16,12 +15,10 @@ class Auth extends React.Component {
 
   authenticate() {
     this.props.setLoading(true);
-    firebase.auth()
-      .signInWithPopup(provider)
+    signIn()
       .then((result) => {
-        db.collection('users')
-          .where('uid', '==', result.user.uid)
-          .get()
+        const uid = result.user.uid;
+        isAccountExits({ uid })
           .then((snapshot) => {
             if (!snapshot.empty) {
               const {
@@ -29,13 +26,6 @@ class Auth extends React.Component {
               } = snapshot.docs[0].data();
               this.props.setLoading(false);
               this.props.setLogin(true);
-              console.log({
-                uid,
-                email,
-                displayName,
-                photoURL,
-                accountType,
-              });
               this.props.setUser({
                 uid,
                 email,
@@ -47,31 +37,31 @@ class Auth extends React.Component {
               const {
                 displayName, email, photoURL, uid,
               } = result.user;
-              db.collection('users')
-                .add({
+              createNewUser({
+                uid,
+                email,
+                displayName,
+                photoURL,
+              })
+              .then(() => {
+                this.props.setLoading(false);
+                this.props.setLogin(true);
+                this.props.setUser({
                   uid,
                   email,
                   displayName,
                   photoURL,
                   accountType: 'FREE',
-                })
-                .then(() => {
-                  this.props.setLoading(false);
-                  this.props.setLogin(true);
-                  this.props.setUser({
-                    uid,
-                    email,
-                    displayName,
-                    photoURL,
-                    accountType: 'FREE',
-                  });
-                })
-                .catch((error) => {
-                  console.log('Error getting documents: ', error);
                 });
+              })
+              .catch((error) => {
+                this.props.setLoading(false);
+                console.log('Error getting documents: ', error);
+              });
             }
           })
           .catch((error) => {
+            this.props.setLoading(false);
             console.log('Error getting documents: ', error);
           });
       }).catch((error) => {

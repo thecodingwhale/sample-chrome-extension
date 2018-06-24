@@ -1,7 +1,6 @@
 import { applyMiddleware, createStore } from 'redux';
 import { alias } from 'react-chrome-redux';
 import thunk from 'redux-thunk';
-// import logger from 'redux-logger';
 
 import rootReducer from './reducers';
 import initialState from './initial';
