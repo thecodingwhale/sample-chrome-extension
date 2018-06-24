@@ -37,7 +37,7 @@ function onUrlChange() {
       const isGithub = String(currentUrl).includes('github.com');
 
       updateBadge(isGithub ? ' ' : '');
-      store.dispatch(Actions.updateCurrentUrl(currentUrl));
+      // store.dispatch(Actions.updateCurrentUrl(currentUrl));
     },
   );
 }

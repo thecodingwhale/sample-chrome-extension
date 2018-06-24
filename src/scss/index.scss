@@ -1,5 +1,41 @@
 @import '../../node_modules/sanitize.css/sanitize.css';
 
+.container {
+  display: flex;
+  &__half {
+    width: 50%;
+  }
+}
+
+.text-center {
+  text-align: center;
+}
+
+.flex-center-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.box {
+  width: 260px;
+  padding: 12px;
+  background-color: #f7f7f7;
+
+  &__header {
+    margin-bottom: 12px;
+  }
+  &__body {
+    height: 100px;
+    background-color: #ffffff;
+    border: 1px solid #e9e9e9;
+    margin-bottom: 12px;
+  }
+}
+
+
+
 @import 'components/App.scss';
 @import 'components/Auth.scss';
 @import 'components/Welcome.scss';
+@import 'components/Options.scss';

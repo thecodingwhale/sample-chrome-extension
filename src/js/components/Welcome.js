@@ -9,7 +9,7 @@ class Welcome extends React.Component {
   }
 
   changeAccountType() {
-    console.log('test')
+    chrome.runtime.openOptionsPage();
   }
 
   render() {
