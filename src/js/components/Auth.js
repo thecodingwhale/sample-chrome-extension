@@ -25,16 +25,23 @@ class Auth extends React.Component {
           .then((snapshot) => {
             if (!snapshot.empty) {
               const {
-                uid, email, displayName, photoURL, acountType,
+                uid, email, displayName, photoURL, accountType,
               } = snapshot.docs[0].data();
               this.props.setLoading(false);
               this.props.setLogin(true);
+              console.log({
+                uid,
+                email,
+                displayName,
+                photoURL,
+                accountType,
+              });
               this.props.setUser({
                 uid,
                 email,
                 displayName,
                 photoURL,
-                acountType,
+                accountType,
               });
             } else {
               const {
@@ -46,7 +53,7 @@ class Auth extends React.Component {
                   email,
                   displayName,
                   photoURL,
-                  acountType: 'FREE',
+                  accountType: 'FREE',
                 })
                 .then(() => {
                   this.props.setLoading(false);
@@ -56,7 +63,7 @@ class Auth extends React.Component {
                     email,
                     displayName,
                     photoURL,
-                    acountType: 'FREE',
+                    accountType: 'FREE',
                   });
                 })
                 .catch((error) => {

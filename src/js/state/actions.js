@@ -1,3 +1,5 @@
+import qs from 'qs';
+
 export const SET_LOADING = 'SET_LOADING';
 export function setLoading(isLoading) {
   return {
@@ -19,6 +21,13 @@ export function setUser(user) {
   return {
     type: SET_USER,
     user,
+  };
+}
+
+export const PAYMENT_SUCCESS = 'PAYMENT_SUCCESS';
+export function makePaymentSuccess() {
+  return {
+    type: PAYMENT_SUCCESS
   };
 }
 

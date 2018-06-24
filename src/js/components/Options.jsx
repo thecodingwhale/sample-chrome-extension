@@ -3,12 +3,68 @@ import Modal from 'react-modal';
 import { hot } from 'react-hot-loader';
 import { connect } from 'react-redux';
 
+import axios from 'axios';
+
+import { db } from '../firebase';
+
 import CustomModal from './CustomModal';
 
 import * as Actions from '../state/actions';
 import * as Aliases from '../state/aliases';
 
 import '../../scss/index.scss';
+
+const Api = {
+  getUserPaymentStatus: ({ uid, email }) => {
+    const url = 'https://47d6201c-3351-4a18-b3b8-88472274520d.mock.pstmn.io/amzfire-client/us-central1/api/getUserPaymentStatus';
+    const data = {
+      reqData: {
+        app: 'amzfire-review-to-order',
+        email: email,
+        userId: uid
+      },
+    };
+    const options = {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json'
+      },
+      data: data,
+      url,
+    };
+    return axios(options);
+  },
+  createPaymentOrder: ({ uid, email }) => {
+    const url = 'https://47d6201c-3351-4a18-b3b8-88472274520d.mock.pstmn.io/amzfire-client/us-central1/api/createPaymentOrder';
+    const data = {
+      reqData: {
+        app: 'amzfire-review-to-order',
+        email: email,
+        userId: uid
+      },
+    };
+    const options = {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json'
+      },
+      data: data,
+      url,
+    };
+    return axios(options);
+  },
+  isAccountExits: ({ uid }) => {
+    return db.collection('users').where('uid', '==', uid).get();
+  },
+  updateAccountType: ({ docId, accountType }) => {
+    return db.collection('users')
+      .doc(docId)
+      .update({
+        accountType: accountType,
+      });
+  }
+}
+
 
 class Options extends React.Component {
   constructor(props) {
@@ -29,11 +85,37 @@ class Options extends React.Component {
   }
 
   makePayment() {
-    console.log('make payment');
+    const { uid, email, displayName, photoURL } = this.props.user;
+    this.props.setLoading(true);
+    Api.isAccountExits({ uid })
+      .then((snapshot) => {
+        if (!snapshot.empty) {
+        const accountType = 'PRO';
+        const docId = snapshot.docs[0].id;
+        Api.updateAccountType({ docId, accountType })
+          .then(response => {
+            this.props.setLoading(false);
+            this.props.setUser({
+              uid,
+              email,
+              displayName,
+              photoURL,
+              accountType,
+            });
+            this.toggle();
+          })
+          .catch((error) => {
+            this.props.setLoading(false);
+          });
+        }
+      })
+      .catch((error) => {
+        this.props.setLoading(false);
+      });
   }
 
   render() {
-    const { isLogin } = this.props;
+    const { isLogin, isLoading, user } = this.props;
     return (
       <div className="Options">
         <CustomModal
@@ -44,7 +126,12 @@ class Options extends React.Component {
             <div>
               Paypal
             </div>
-            <button onClick={this.makePayment}>Make Payment</button>
+            <button
+              disabled={isLoading}
+              onClick={this.makePayment}
+            >
+              Make Payment
+            </button>
           </div>
         </CustomModal>
         {isLogin ? (
@@ -58,19 +145,19 @@ class Options extends React.Component {
                   }}
                 >
                   <div className="box">
-                    <div className="box__header text-center">
+                    <div
+                      className="box__header text-center"
+                      style={{
+                        visibility: (user.accountType === 'FREE') ? '' : 'hidden',
+                      }}
+                    >
                       Current
                     </div>
                     <div className="box__body flex-center-content">
                       FREE
                     </div>
                     <div className="box__footer text-center">
-                      <button
-                        type="button"
-                        style={{
-                          visibility: 'hidden',
-                        }}
-                      >
+                      <button type="button">
                         select
                       </button>
                     </div>
@@ -90,7 +177,7 @@ class Options extends React.Component {
                     <div
                       className="box__header text-center"
                       style={{
-                        visibility: 'hidden',
+                        visibility: (user.accountType === 'PRO') ? '' : 'hidden',
                       }}
                     >
                       Current
@@ -120,11 +207,14 @@ class Options extends React.Component {
 }
 
 const mapStateToProps = state => ({
+  isLoading: state.isLoading,
   isLogin: state.isLogin,
+  user: state.user,
 });
 
 const mapDispatchToProps = dispatch => ({
-
+  setLoading: isLoading => dispatch(Actions.setLoading(isLoading)),
+  setUser: user => dispatch(Actions.setUser(user)),
 });
 
 const statefulApp = connect(

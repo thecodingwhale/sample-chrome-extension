@@ -15,3 +15,9 @@ export const list = {};
 //       dispatch(updateDataset(res.data));
 //     });
 // };
+
+export const MAKE_PAYMENT = 'MAKE_PAYMENT';
+list[MAKE_PAYMENT] = ({ payload }) => (dispatch) => {
+  console.log(dispatch);
+};
+
