@@ -3,4 +3,8 @@ export default {
   isLoading: false,
   isLogin: false,
   user: {},
+
+  account: {
+
+  },
 };

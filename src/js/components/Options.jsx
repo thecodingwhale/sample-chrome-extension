@@ -1,6 +1,9 @@
 import React from 'react';
+import Modal from 'react-modal';
 import { hot } from 'react-hot-loader';
 import { connect } from 'react-redux';
+
+import CustomModal from './CustomModal';
 
 import * as Actions from '../state/actions';
 import * as Aliases from '../state/aliases';
@@ -8,10 +11,42 @@ import * as Aliases from '../state/aliases';
 import '../../scss/index.scss';
 
 class Options extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      toggle: false,
+    };
+
+    this.toggle = this.toggle.bind(this);
+    this.makePayment = this.makePayment.bind(this);
+  }
+
+  toggle() {
+    this.setState({
+      toggle: !this.state.toggle,
+    });
+  }
+
+  makePayment() {
+    console.log('make payment');
+  }
+
   render() {
     const { isLogin } = this.props;
     return (
       <div className="Options">
+        <CustomModal
+          open={this.state.toggle}
+          onClose={this.toggle}
+        >
+          <div className="Options__paypal">
+            <div>
+              Paypal
+            </div>
+            <button onClick={this.makePayment}>Make Payment</button>
+          </div>
+        </CustomModal>
         {isLogin ? (
           <div className="container">
             <div className="container__half">
@@ -66,6 +101,7 @@ class Options extends React.Component {
                     <div className="box__footer text-center">
                       <button
                         type="button"
+                        onClick={this.toggle}
                       >
                         select
                       </button>

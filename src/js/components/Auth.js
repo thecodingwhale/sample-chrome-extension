@@ -24,7 +24,9 @@ class Auth extends React.Component {
           .get()
           .then((snapshot) => {
             if (!snapshot.empty) {
-              const { uid, email, displayName, photoURL, acountType } = snapshot.docs[0].data();
+              const {
+                uid, email, displayName, photoURL, acountType,
+              } = snapshot.docs[0].data();
               this.props.setLoading(false);
               this.props.setLogin(true);
               this.props.setUser({
@@ -35,7 +37,9 @@ class Auth extends React.Component {
                 acountType,
               });
             } else {
-              const { displayName, email, photoURL, uid } = result.user;
+              const {
+                displayName, email, photoURL, uid,
+              } = result.user;
               db.collection('users')
                 .add({
                   uid,
@@ -56,12 +60,12 @@ class Auth extends React.Component {
                   });
                 })
                 .catch((error) => {
-                  console.log("Error getting documents: ", error);
+                  console.log('Error getting documents: ', error);
                 });
             }
           })
           .catch((error) => {
-            console.log("Error getting documents: ", error);
+            console.log('Error getting documents: ', error);
           });
       }).catch((error) => {
         this.props.setLoading(false);
