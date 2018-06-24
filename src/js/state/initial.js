@@ -1,6 +1,6 @@
 export default {
+  error: false,
   isLoading: false,
-  tabIndex: 0,
-  currentUrl: null,
-  dataset: [],
+  isLogin: false,
+  user: {},
 };

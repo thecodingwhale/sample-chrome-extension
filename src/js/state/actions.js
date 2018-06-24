@@ -6,26 +6,42 @@ export function setLoading(isLoading) {
   };
 }
 
-export const UPDATE_DATASET = 'UPDATE_DATASET';
-export function updateDataset(dataset) {
+export const SET_LOGIN = 'SET_LOGIN';
+export function setLogin(isLogin) {
   return {
-    type: UPDATE_DATASET,
-    dataset,
+    type: SET_LOGIN,
+    isLogin,
   };
 }
 
-export const UPDATE_TAB = 'UPDATE_TAB';
-export function updateTab(tabIndex) {
+export const SET_USER = 'SET_USER';
+export function setUser(user) {
   return {
-    type: UPDATE_TAB,
-    tabIndex,
+    type: SET_USER,
+    user,
   };
 }
 
-export const UPDATE_CURRENT_URL = 'UPDATE_CURRENT_URL';
-export function updateCurrentUrl(currentUrl) {
-  return {
-    type: UPDATE_CURRENT_URL,
-    currentUrl,
-  };
-}
+// export const UPDATE_DATASET = 'UPDATE_DATASET';
+// export function updateDataset(dataset) {
+//   return {
+//     type: UPDATE_DATASET,
+//     dataset,
+//   };
+// }
+
+// export const UPDATE_TAB = 'UPDATE_TAB';
+// export function updateTab(tabIndex) {
+//   return {
+//     type: UPDATE_TAB,
+//     tabIndex,
+//   };
+// }
+
+// export const UPDATE_CURRENT_URL = 'UPDATE_CURRENT_URL';
+// export function updateCurrentUrl(currentUrl) {
+//   return {
+//     type: UPDATE_CURRENT_URL,
+//     currentUrl,
+//   };
+// }

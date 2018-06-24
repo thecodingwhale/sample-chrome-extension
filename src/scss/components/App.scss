@@ -1,9 +1,4 @@
-.popup {
+.App {
   width: 300px;
+  min-height: 200px;
 }
-
-h2 {
-  color: red;
-}
-
-@import '../../../node_modules/react-tabs/style/react-tabs.scss';
