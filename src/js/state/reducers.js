@@ -12,6 +12,15 @@ function isLoading(state = initial.isLoading, action) {
   }
 }
 
+function error(state = initial.error, action) {
+  switch (action.type) {
+    case Actions.SET_ERROR:
+      return action.error;
+    default:
+      return state;
+  }
+}
+
 function isLogin(state = initial.isLogin, action) {
   switch (action.type) {
     case Actions.SET_LOGIN:
@@ -33,5 +42,6 @@ function user(state = initial.user, action) {
 export default combineReducers({
   isLoading,
   isLogin,
+  error,
   user,
 });

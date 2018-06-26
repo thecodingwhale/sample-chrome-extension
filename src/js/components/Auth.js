@@ -2,6 +2,8 @@ import React from 'react';
 import { hot } from 'react-hot-loader';
 import { connect } from 'react-redux';
 
+import { Button, Message } from 'semantic-ui-react';
+
 import { signIn, isAccountExits, createNewUser } from '../Api';
 
 import * as Actions from '../state/actions';
@@ -10,11 +12,13 @@ import * as Aliases from '../state/aliases';
 class Auth extends React.Component {
   constructor() {
     super();
+
     this.authenticate = this.authenticate.bind(this);
   }
 
   authenticate() {
     this.props.setLoading(true);
+    this.props.setError(false);
     signIn()
       .then((result) => {
         const uid = result.user.uid;
@@ -56,41 +60,56 @@ class Auth extends React.Component {
               })
               .catch((error) => {
                 this.props.setLoading(false);
-                console.log('Error getting documents: ', error);
+                this.props.setError(`failed creating new account for ${email}.`);
+                console.log(error)
               });
             }
           })
           .catch((error) => {
             this.props.setLoading(false);
-            console.log('Error getting documents: ', error);
+            this.props.setError(`account ${email} is already exists.`);
+            console.log(error);
           });
       }).catch((error) => {
         this.props.setLoading(false);
-        /*
-          // Handle Errors here.
-          const errorCode = error.code;
-          const errorMessage = error.message;
-
-          // The email of the user's account used.
-          const email = error.email;
-
-          // The firebase.auth.AuthCredential type that was used.
-          const credential = error.credential;
-        */
+        this.props.setLoading(false);
+        const email = error.email;
+        if (email) {
+          this.props.setError(`The email of the user's account used.`);
+        }
+        const credential = error.credential;
+        if (credential) {
+          this.props.setError(`Auth credential was used.`);
+        }
+        console.log(error);
       });
   }
 
   render() {
-    const { isLoading } = this.props;
+    const { isLoading, error } = this.props;
+    console.log();
     return (
       <div className="Auth">
-        <button
+        <Button
           type="button"
+          color="google plus"
+          size="mini"
           onClick={this.authenticate}
           disabled={isLoading}
+          loading={isLoading}
         >
-          {isLoading ? 'Login In...' : 'Login with Google'}
-        </button>
+          Login with Google
+        </Button>
+        {error !== false ? (
+          <Message
+            negative
+            size="mini"
+            content={error}
+            onDismiss={() => {
+              this.props.setError(false);
+            }}
+          />
+        ) : null}
       </div>
     );
   }
@@ -98,10 +117,12 @@ class Auth extends React.Component {
 
 const mapStateToProps = state => ({
   isLoading: state.isLoading,
+  error: state.error,
 });
 
 const mapDispatchToProps = dispatch => ({
   setLoading: isLoading => dispatch(Actions.setLoading(isLoading)),
+  setError: error => dispatch(Actions.setError(error)),
   setLogin: isLogin => dispatch(Actions.setLogin(isLogin)),
   setUser: user => dispatch(Actions.setUser(user)),
 });
