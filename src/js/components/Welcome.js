@@ -2,6 +2,8 @@ import React from 'react';
 import { hot } from 'react-hot-loader';
 import { connect } from 'react-redux';
 
+import { Header, Icon, Image, Card, Button } from 'semantic-ui-react';
+
 class Welcome extends React.Component {
   constructor() {
     super();
@@ -16,22 +18,25 @@ class Welcome extends React.Component {
     const { user } = this.props;
     return (
       <div className="Welcome">
-        <div>Welcome</div>
-        <div>
-          {user.displayName}
-        </div>
-
-        <div>Account Type</div>
-        <div>
-          {user.acountType}
-        </div>
-
-        <button
-          type="button"
-          onClick={this.changeAccountType}
-        >
-          Change account type
-        </button>
+        <Card>
+          <Card.Content>
+            <Image floated='right' size='mini' src={user.photoURL} circular />
+            <Card.Header>{user.displayName}</Card.Header>
+            <Card.Meta>{user.accountType}</Card.Meta>
+            <Card.Description>
+              You can put your sample message here
+            </Card.Description>
+          </Card.Content>
+          <Card.Content extra>
+            <Button
+              basic
+              onClick={this.changeAccountType}
+              color='green'
+            >
+              Change Account Type
+            </Button>
+          </Card.Content>
+        </Card>
       </div>
     );
   }
