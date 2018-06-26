@@ -3,7 +3,7 @@ import { hot } from 'react-hot-loader';
 import { connect } from 'react-redux';
 
 import { Button, Message } from 'semantic-ui-react';
-
+import { FREE } from '../constants';
 import { signIn, isAccountExits, createNewUser } from '../Api';
 
 import * as Actions from '../state/actions';
@@ -13,15 +13,26 @@ class Auth extends React.Component {
   constructor() {
     super();
 
+    this.state = {
+      textHelper: '',
+    };
     this.authenticate = this.authenticate.bind(this);
+  }
+
+  setTextHelper(text) {
+    this.setState({
+      textHelper: text,
+    });
   }
 
   authenticate() {
     this.props.setLoading(true);
     this.props.setError(false);
+    this.setTextHelper('Authenticating...');
     signIn()
       .then((result) => {
         const uid = result.user.uid;
+        this.setTextHelper('Verifying...');
         isAccountExits({ uid })
           .then((snapshot) => {
             if (!snapshot.empty) {
@@ -41,6 +52,7 @@ class Auth extends React.Component {
               const {
                 displayName, email, photoURL, uid,
               } = result.user;
+              this.setTextHelper('Creating new account...');
               createNewUser({
                 uid,
                 email,
@@ -55,12 +67,13 @@ class Auth extends React.Component {
                   email,
                   displayName,
                   photoURL,
-                  accountType: 'FREE',
+                  accountType: FREE,
                 });
               })
               .catch((error) => {
                 this.props.setLoading(false);
                 this.props.setError(`failed creating new account for ${email}.`);
+                this.setTextHelper('');
                 console.log(error)
               });
             }
@@ -68,11 +81,13 @@ class Auth extends React.Component {
           .catch((error) => {
             this.props.setLoading(false);
             this.props.setError(`account ${email} is already exists.`);
+            this.setTextHelper('');
             console.log(error);
           });
       }).catch((error) => {
         this.props.setLoading(false);
         this.props.setLoading(false);
+        this.setTextHelper('');
         const email = error.email;
         if (email) {
           this.props.setError(`The email of the user's account used.`);
@@ -87,7 +102,6 @@ class Auth extends React.Component {
 
   render() {
     const { isLoading, error } = this.props;
-    console.log();
     return (
       <div className="Auth">
         <Button
@@ -109,6 +123,11 @@ class Auth extends React.Component {
               this.props.setError(false);
             }}
           />
+        ) : null}
+        {this.state.textHelper ? (
+          <small className="text-helper">
+            {this.state.textHelper}
+          </small>
         ) : null}
       </div>
     );

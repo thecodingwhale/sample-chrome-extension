@@ -13,10 +13,10 @@ import '../../scss/index.scss';
 
 class App extends React.Component {
   render() {
-    const { isLogin, error } = this.props;
+    const { isLogin, error, user } = this.props;
     return (
       <div className="App">
-        {isLogin && error === false ? <Welcome /> : <Auth />}
+        {(isLogin && error === false && Object.keys(user).length) ? <Welcome /> : <Auth />}
       </div>
     );
   }
@@ -25,6 +25,7 @@ class App extends React.Component {
 const mapStateToProps = state => ({
   isLogin: state.isLogin,
   error: state.error,
+  user: state.user,
 });
 
 const mapDispatchToProps = dispatch => ({
