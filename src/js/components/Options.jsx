@@ -1,14 +1,18 @@
 import React from 'react';
 import { hot } from 'react-hot-loader';
 import { connect } from 'react-redux';
-import CustomModal from './CustomModal';
+import { Header, Modal, Button } from 'semantic-ui-react';
 
-import { isAccountExits, updateAccountType } from '../Api';
-
-import * as Actions from '../state/actions';
-import * as Aliases from '../state/aliases';
+import { FREE, PRO } from '../constants';
 
 import '../../scss/index.scss';
+
+import { isAccountExits, updateAccountType } from '../Api';
+import * as Actions from '../state/actions';
+import * as Aliases from '../state/aliases';
+import CustomModal from './CustomModal';
+import Dashboard from './Dashboard';
+import Page404 from './Page404';
 
 class Options extends React.Component {
   constructor(props) {
@@ -34,7 +38,7 @@ class Options extends React.Component {
     isAccountExits({ uid })
       .then((snapshot) => {
         if (!snapshot.empty) {
-        const accountType = 'PRO';
+        const accountType = PRO;
         const docId = snapshot.docs[0].id;
         updateAccountType({ docId, accountType })
           .then(response => {
@@ -66,84 +70,106 @@ class Options extends React.Component {
           open={this.state.toggle}
           onClose={this.toggle}
         >
-          <div className="Options__paypal">
-            <div>
-              Paypal
-            </div>
-            <button
+          <Modal.Header>Upgrade Account</Modal.Header>
+          <Modal.Content>
+            <Modal.Description>
+              <h3>Would you want to upgrade your account to PRO?</h3>
+              <p>You can unlock multiple access, avail our premium services and unlimited support.</p>
+            </Modal.Description>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button
+              color='black'
+              onClick={this.toggle}
+              disabled={isLoading}
+            >
+              Close
+            </Button>
+            <Button
+              positive
+              content={isLoading ? 'Upgrading...' : 'Upgrade'}
               disabled={isLoading}
               onClick={this.makePayment}
-            >
-              Make Payment
-            </button>
-          </div>
+            />
+          </Modal.Actions>
         </CustomModal>
         {isLogin ? (
-          <div className="container">
-            <div className="container__half">
-              <div className="Options__pane">
-                <div
-                  className="Options__pane__full-centered"
-                  style={{
-                    backgroundColor: '#d6d6d6',
-                  }}
-                >
-                  <div className="box">
+          <div>
+            {user.accountType === FREE ? (
+              <div className="container">
+                <div className="container__half">
+                  <div className="Options__pane">
                     <div
-                      className="box__header text-center"
+                      className="Options__pane__full-centered"
                       style={{
-                        visibility: (user.accountType === 'FREE') ? '' : 'hidden',
+                        backgroundColor: '#d6d6d6',
                       }}
                     >
-                      Current
+                      <div className="box">
+                        <div
+                          className="box__header text-center"
+                          style={{
+                            visibility: (user.accountType === 'FREE') ? '' : 'hidden',
+                          }}
+                        >
+                          Current
+                        </div>
+                        <div className="box__body flex-center-content">
+                          FREE
+                        </div>
+                        <div className="box__footer text-center">
+                          <Button
+                            basic
+                            type="button"
+                          >
+                            Select
+                          </Button>
+                        </div>
+                      </div>
                     </div>
-                    <div className="box__body flex-center-content">
-                      FREE
-                    </div>
-                    <div className="box__footer text-center">
-                      <button type="button">
-                        select
-                      </button>
+                  </div>
+                </div>
+                <div className="container__half">
+                  <div className="Options__pane">
+                    <div
+                      className="Options__pane__full-centered"
+                      style={{
+                        backgroundColor: '#5dd8e4',
+                      }}
+                    >
+                      <div className="box">
+                        <div
+                          className="box__header text-center"
+                          style={{
+                            visibility: (user.accountType === 'PRO') ? '' : 'hidden',
+                          }}
+                        >
+                          Current
+                        </div>
+                        <div className="box__body flex-center-content">
+                          PRO
+                        </div>
+                        <div className="box__footer text-center">
+                          <Button
+                            basic
+                            type="button"
+                            onClick={this.toggle}
+                          >
+                            Select
+                          </Button>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="container__half">
-              <div className="Options__pane">
-                <div
-                  className="Options__pane__full-centered"
-                  style={{
-                    backgroundColor: '#5dd8e4',
-                  }}
-                >
-                  <div className="box">
-                    <div
-                      className="box__header text-center"
-                      style={{
-                        visibility: (user.accountType === 'PRO') ? '' : 'hidden',
-                      }}
-                    >
-                      Current
-                    </div>
-                    <div className="box__body flex-center-content">
-                      PRO
-                    </div>
-                    <div className="box__footer text-center">
-                      <button
-                        type="button"
-                        onClick={this.toggle}
-                      >
-                        select
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            ) : (
+              <Dashboard />
+
+            )}
           </div>
         ) : (
-          <div>Please signin first.</div>
+          <Page404 />
         )}
       </div>
     );

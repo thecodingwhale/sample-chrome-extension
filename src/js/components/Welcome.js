@@ -4,14 +4,23 @@ import { connect } from 'react-redux';
 
 import { Header, Icon, Image, Card, Button } from 'semantic-ui-react';
 
+import { FREE } from '../constants';
+
+import * as Actions from '../state/actions';
+
 class Welcome extends React.Component {
   constructor() {
     super();
     this.changeAccountType = this.changeAccountType.bind(this);
+    this.onLogout = this.onLogout.bind(this);
   }
 
   changeAccountType() {
     chrome.runtime.openOptionsPage();
+  }
+
+  onLogout() {
+    this.props.logout();
   }
 
   render() {
@@ -28,13 +37,18 @@ class Welcome extends React.Component {
             </Card.Description>
           </Card.Content>
           <Card.Content extra>
-            <Button
-              basic
-              onClick={this.changeAccountType}
-              color='green'
-            >
-              Change Account Type
-            </Button>
+            <div className='ui two buttons'>
+              <Button
+                basic
+                color='green'
+                onClick={this.changeAccountType}
+              >
+                {user.accountType === FREE ? 'Upgrade' : 'Dashboard'}
+              </Button>
+              <Button basic color='red' onClick={this.onLogout}>
+                Logout
+              </Button>
+            </div>
           </Card.Content>
         </Card>
       </div>
@@ -47,7 +61,10 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-
+  logout: () => {
+    dispatch(Actions.setLogin(false));
+    dispatch(Actions.setUser({}));
+  },
 });
 
 const statefulApp = connect(
