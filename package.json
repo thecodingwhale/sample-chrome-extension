@@ -1,8 +1,8 @@
 {
-  "name": "react-chrome-extension-boilerplate",
+  "name": "sample-chrome-extension",
   "version": "1.0.0",
-  "author": "Mohammed Elalj <hi@tonoid.com>",
-  "description": "Boilerplate for a Chrome Extension with React + SASS + Redux",
+  "author": "Aldren Terante <aldren.terante@gmail.com>",
+  "description": "A sample chrome extension build with react+redux",
   "scripts": {
     "build": "node utils/build.js",
     "start": "node utils/webserver.js",
