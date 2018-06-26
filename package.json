@@ -20,7 +20,9 @@
     "react-tabs": "^2.2.2",
     "redux": "^4.0.0",
     "redux-thunk": "^2.3.0",
-    "sanitize.css": "^5.0.0"
+    "sanitize.css": "^5.0.0",
+    "semantic-ui-css": "^2.3.2",
+    "semantic-ui-react": "^0.81.2"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
