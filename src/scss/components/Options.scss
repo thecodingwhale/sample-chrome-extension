@@ -11,7 +11,14 @@
   }
 }
 
-.Options__paypal {
-  height: 400px;
-  width: 460px;
+.Options__free {
+  background-color: #fbfbfb;
+}
+
+.Options__pro {
+  @include fullBackgroundColor();
+  @include fullBackgroundCover();
+  .box {
+    position: absolute;
+  }
 }

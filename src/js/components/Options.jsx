@@ -100,27 +100,25 @@ class Options extends React.Component {
                 <div className="container__half">
                   <div className="Options__pane">
                     <div
-                      className="Options__pane__full-centered"
-                      style={{
-                        backgroundColor: '#d6d6d6',
-                      }}
+                      className="Options__pane__full-centered Options__free"
                     >
                       <div className="box">
                         <div
                           className="box__header text-center"
                           style={{
-                            visibility: (user.accountType === 'FREE') ? '' : 'hidden',
+                            visibility: (user.accountType === FREE) ? '' : 'hidden',
                           }}
                         >
                           Current
                         </div>
                         <div className="box__body flex-center-content">
-                          FREE
+                          <h3>FREE</h3>
                         </div>
                         <div className="box__footer text-center">
                           <Button
                             basic
                             type="button"
+                            size="tiny"
                           >
                             Select
                           </Button>
@@ -131,31 +129,28 @@ class Options extends React.Component {
                 </div>
                 <div className="container__half">
                   <div className="Options__pane">
-                    <div
-                      className="Options__pane__full-centered"
-                      style={{
-                        backgroundColor: '#5dd8e4',
-                      }}
-                    >
+                    <div className="Options__pane__full-centered Options__pro">
                       <div className="box">
                         <div
                           className="box__header text-center"
                           style={{
-                            visibility: (user.accountType === 'PRO') ? '' : 'hidden',
+                            visibility: (user.accountType === PRO) ? '' : 'hidden',
                           }}
                         >
                           Current
                         </div>
                         <div className="box__body flex-center-content">
-                          PRO
+                          <h1>PRO</h1>
                         </div>
                         <div className="box__footer text-center">
                           <Button
                             basic
+                            positive
                             type="button"
+                            size="large"
                             onClick={this.toggle}
                           >
-                            Select
+                            Upgrade
                           </Button>
                         </div>
                       </div>
