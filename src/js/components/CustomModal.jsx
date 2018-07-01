@@ -1,50 +1,45 @@
 import React from 'react';
-import Modal from 'react-modal';
-
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-  },
-};
+import { Button, Header, Image, Modal } from 'semantic-ui-react'
 
 class CustomModal extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      toggle: this.props.open,
+      open: this.props.open,
     };
-    this.closeModal = this.closeModal.bind(this);
+
+    this.close = this.close.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.open !== nextProps.open) {
       this.setState({
-        toggle: nextProps.open,
+        open: nextProps.open,
       });
     }
   }
 
-  closeModal() {
+  close() {
     this.setState({
-      toggle: false,
+      open: false,
     }, () => {
       this.props.onClose();
     });
   }
 
   render() {
+    const { open } = this.state;
     return (
       <Modal
-        isOpen={this.state.toggle}
-        onRequestClose={this.closeModal}
-        style={customStyles}
+        basic
+        closeOnEscape={false}
+        closeOnRootNodeClick={false}
+        dimmer="blurring"
+        open={open}
+        onClose={this.close}
+        size='small'
       >
-        <button onClick={this.closeModal}>x</button>
         {this.props.children}
       </Modal>
     );

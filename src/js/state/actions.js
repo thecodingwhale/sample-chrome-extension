@@ -1,10 +1,16 @@
-import qs from 'qs';
-
 export const SET_LOADING = 'SET_LOADING';
 export function setLoading(isLoading) {
   return {
     type: SET_LOADING,
     isLoading,
+  };
+}
+
+export const SET_ERROR = 'SET_ERROR';
+export function setError(error) {
+  return {
+    type: SET_ERROR,
+    error,
   };
 }
 

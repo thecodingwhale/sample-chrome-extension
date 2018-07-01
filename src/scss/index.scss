@@ -1,4 +1,23 @@
 @import '../../node_modules/sanitize.css/sanitize.css';
+@import './semantic.css';
+
+@mixin fullBackgroundColor() {
+  background: rgb(185, 249, 255);
+  background: linear-gradient(145deg, rgb(185, 249, 255) 0%, rgb(85, 20, 1) 100%);
+}
+
+@mixin fullBackgroundCover() {
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: url('http://www.ofcomsolution.com/wp-content/uploads/2016/06/wallpaper-2.jpg') center center/cover;
+    opacity: .03;
+  }
+}
 
 .container {
   display: flex;
@@ -18,24 +37,45 @@
 }
 
 .box {
-  width: 260px;
-  padding: 12px;
+  max-width: 330px;
+  width: 100%;
+  padding: 20px;
   background-color: #f7f7f7;
+
+  -webkit-box-shadow: 0px 0px 96px -7px rgba(0,0,0,0.2);
+  -moz-box-shadow: 0px 0px 96px -7px rgba(0,0,0,0.2);
+  box-shadow: 0px 0px 96px -7px rgba(0,0,0,0.2);
+
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+
+  border-top: 8px solid #dcdcdc;
 
   &__header {
     margin-bottom: 12px;
   }
   &__body {
-    height: 100px;
+    height: 180px;
     background-color: #ffffff;
     border: 1px solid #e9e9e9;
     margin-bottom: 12px;
   }
 }
 
+.text-helper {
+  color: #a9a9a9;
+}
 
+.header.white {
+  color: #ffffff;
+  .sub.header {
+    color: #ffffff;
+  }
+}
 
 @import 'components/App.scss';
 @import 'components/Auth.scss';
 @import 'components/Welcome.scss';
 @import 'components/Options.scss';
+@import 'components/Dashboard.scss';
+@import 'components/Page404.scss';
